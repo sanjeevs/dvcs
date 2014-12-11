@@ -1,5 +1,12 @@
 ## Git For RTL Designers (Git for Agile Hardware design?)
 
+### Traditional Version Control System
+  * Traditionally hardware design repositories are modelled as a single monolithic central repository with a single main trunk. 
+  * Creating branches is slow and generally frowned upon. 
+  * Tagging is light weight and used for sharing code. 
+  
+  This works well with the older waterflow model but not with the current agile model.
+
 ### Waterflow Model
   * Sequential
   * Each stage finishes before the next one can start.
@@ -11,15 +18,14 @@
   * Multiple iterations like 90% functional, 100% functional
 
     RTL Design -------------> Block Level Verification
-            ------------> Top Level Verification
-              ----------> Emulation
-           -------------> Back End
-    Hence front end RTL designers needs a state of the art version control system to work efficiently.
 
-### Traditional Version Control System
-  * Traditionally hardware design repositories are organized as a single monolithic central repository with a single main trunk. 
-  * Creating branches is slow and generally frowned upon. 
-  * Tagging is light weight and used for sharing code. This type of model does not meet the current needs of the RTL designers.
+            ------------> Top Level Verification
+            
+              ----------> Emulation
+
+           -------------> Back End
+
+*Hence front end RTL designers needs a state of the art version control system to work efficiently.*
 
 ### Distributed Version Control System
   In this model we propose using a popular distributed version control system "Git". Git is a open source version control system widely used in the software world but has not been adopted widely in the hardware world. 
@@ -50,13 +56,16 @@
 
   4. Robust Release Mechanism
     + It is a good practice to always keep the last working version of the design in case a bad checkin requires the design to be reverted back. 
-    + Bugs discovered in older releases may need a hot fix in the same release.  
+    + Bugs discovered in older releases may need a hot fix in the same release. Doing this with tags is not possible.
 
   5. Automated Testing
     + Version control system must provide hooks to run regressions, lint tools etc. Implementing it manually by a "BuildMaster" is time consuming and wasting of resource. Usually the build master runs the cron job at specified time (or continuously) to checkout the entire design in a clean area and report the result of the regressions. The usual problems designers face is
       * Lack of Atomic Commit: 
+
         Version control system like "CVS" do not support multiple checkins as a single atomic commit. So there is a chance that the build master may pull an intermediate invalid state of the design.
+
       * Static Scheduling: 
+
         Running all block regression at a fixed time or continuously wastes resources. Debugging failing tests when they are expected to fail is not productive. Instead designers would like to have control on which commits they would like to run regressions on. Designer may decide that it is not worth running regressions on intermediate commits and would like to run it only when all the changes are committed. 
 
 
