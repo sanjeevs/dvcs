@@ -34,44 +34,44 @@ In this paper we assume a ASIC design environment consisting of many hundred of 
 
 ### Problems faces by RTL Designers
 
-  * #### No Private Repositories
+  1. No Private Repositories
   RTL designers are working under the pressure of last minute changes. They are constantly working to push the envelope by trying different implementation of the same features looking to either optimize power, timing, area etc.
 
-  2. ####Supporting Multiple Flavors of Design
+  2. Supporting Multiple Flavors of Design
   * RTL designers are supporting multiple teams at the same time. Traditionally a block level would be verified by the block level team and when complete, would be part of the full chip verificaton. But now, verification teams are running in parallel. The same block could be simultaneously been verified in full chip, multi chip and even emulation environments by different teams.
   * Moreover RTL designers now need to actively work with the backend team to improve synthesis, floor planning for optimizing power, timing....etc. The requirments for fixes here may be different from that required by the verification team. For example the designer might want to flop signals without worrying about the functionality of the design.
 
-3. ####Dependency Hell
+  3. Dependency Hell
   Keeping multiple blocks under one repository causes unwarranted dependencies to creep between the blocks. This leads to "dependency hell" where an unrelated bad check in, causes the current block environment to fail.
 
 ![Traditional View](images/old_dir.png)
 
-4. ####Robust Release Mechanism
+  4. Robust Release Mechanism
   + It is a good practice to always keep the last working version of the design in case a bad checkin requires the design to be reverted back. 
   + Bugs discovered in older releases may need a hot fix in the same release.  
 
-5. ####Automated Testing
+  5. Automated Testing
   Version control system must provide hooks to run regressions, lint tools etc. Implementing it manually by a "BuildMaster" is time consuming and wasting of resource. 
 
 
 ### How Does Git Solve it ?
-1. ####Multiple Repositories 
+  1. Multiple Repositories 
   * Git is a distributed version control system. It allows designers to have private repositories. Designers can work on their experiments using version control without it being visible to anyone else. At some point if the experiments succeed the code can be made visible to selected or everyone on the team.
 
-2. #### LightWeight Branches
+  2. LightWeight Branches
   + Git support light weight branching. Branches allow RTL designers to form dynamic subteams and collaborate on a particular branch without affecting other branches.
 
   + Switching between branches allows the designer to use the same workspace to work on any of the branches.
 
   ![http://nvie.com/posts/a-successful-git-branching-model/](images/git-branches.png)
 
-3. #### Composite Repositories
+  3. Composite Repositories
   Git allows each block to be an independent repository. This requires that the block be organized to be self contained. All external dependencies are explicitly declared by creating a submodule to the external repository. For exampe the chip level repository is a composite repository that pulls in the block repositories.
 ![New Organization](images/new_dir.png)
-4. #### Release Branches
+  4. Release Branches
   + Though all branches are technically the same for Git, it is a common convention to make the "master" branch as the release branch. A commit on the master branch can be treated as a release and tagged appropriately. Having a dedicated branch provides a history of all the releases and so the user can switch to any of the previous branches 
  
  + A hot fix can be implemented as a branch from the release branch. Once validated this branch can be merged back to the development branch so that the bug fixes propagate to the next new release. 
 
-5. #### Hooks For scripting
+  5. Hooks For scripting
   Git provides hooks on different events like commit and push. A push to a particular branch can trigger a continuous integration engine like "Jenkins" to start the regressions on it. Similarly commits may trigger lint and other styling tools to be invoked.
