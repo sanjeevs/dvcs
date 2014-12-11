@@ -65,11 +65,12 @@
 
     + Switching between branches allows the designer to use the same workspace to work on any of the branches.
 
+  ![http://nvie.com/posts/a-successful-git-branching-model/](images/git-branches.png)
 
   3. Composite Repositories
     + Git allows each block to be an independent repository. This requires that the block be organized to be self contained. All external dependencies are explicitly declared by creating a submodule to the external repository. For exampe the chip level repository is a composite repository that pulls in the block repositories.
 
-  ![http://nvie.com/posts/a-successful-git-branching-model/](images/git-branches.png)
+    ![New Organization](images/new_dir.png)
 
   4. Release Branches
     + Though all branches are technically the same for Git, it is a common convention to make the "master" branch as the release branch. A commit on the master branch can be treated as a release and tagged appropriately. Having a dedicated branch provides a history of all the releases and so the user can switch to any of the previous branches 
@@ -79,4 +80,3 @@
   5. Hooks For scripting
     + Git provides hooks on different events like commit and push. A push to a particular branch can trigger a continuous integration engine like "Jenkins" to start the regressions on it. Similarly commits may trigger lint and other styling tools to be invoked.
   
-    ![New Organization](images/new_dir.png)
