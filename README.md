@@ -44,8 +44,6 @@ In this paper we assume a ASIC design environment consisting of many hundred of 
   3. Dependency Hell
   Keeping multiple blocks under one repository causes unwarranted dependencies to creep between the blocks. This leads to "dependency hell" where an unrelated bad check in, causes the current block environment to fail.
 
-![Traditional View](images/old_dir.png)
-
   4. Robust Release Mechanism
   + It is a good practice to always keep the last working version of the design in case a bad checkin requires the design to be reverted back. 
   + Bugs discovered in older releases may need a hot fix in the same release.  
@@ -53,6 +51,7 @@ In this paper we assume a ASIC design environment consisting of many hundred of 
   5. Automated Testing
   Version control system must provide hooks to run regressions, lint tools etc. Implementing it manually by a "BuildMaster" is time consuming and wasting of resource. 
 
+  ![Traditional View](images/old_dir.png)
 
 ### How Does Git Solve it ?
   1. Multiple Repositories 
@@ -67,7 +66,7 @@ In this paper we assume a ASIC design environment consisting of many hundred of 
 
   3. Composite Repositories
   Git allows each block to be an independent repository. This requires that the block be organized to be self contained. All external dependencies are explicitly declared by creating a submodule to the external repository. For exampe the chip level repository is a composite repository that pulls in the block repositories.
-![New Organization](images/new_dir.png)
+
   4. Release Branches
   + Though all branches are technically the same for Git, it is a common convention to make the "master" branch as the release branch. A commit on the master branch can be treated as a release and tagged appropriately. Having a dedicated branch provides a history of all the releases and so the user can switch to any of the previous branches 
  
@@ -75,3 +74,5 @@ In this paper we assume a ASIC design environment consisting of many hundred of 
 
   5. Hooks For scripting
   Git provides hooks on different events like commit and push. A push to a particular branch can trigger a continuous integration engine like "Jenkins" to start the regressions on it. Similarly commits may trigger lint and other styling tools to be invoked.
+  
+  ![New Organization](images/new_dir.png)
