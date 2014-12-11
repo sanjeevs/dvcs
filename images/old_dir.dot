@@ -1,0 +1,12 @@
+digraph G {
+  subgraph cluster_0 {
+  chip -> design;
+  design -> blockA_rtl;
+  design -> blockB_rtl;
+  chip -> verif;
+  verif -> blockA_tb;
+  verif -> blockB_tb;
+  label = "Repository"
+  }
+} 
+   

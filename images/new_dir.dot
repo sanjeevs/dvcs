@@ -1,0 +1,22 @@
+graph G {
+    subgraph "cluster" {
+    label = "Chip Repository"
+    subgraph clusterA {
+      label = "BlockA Repository"
+      blockA -- blockA_design;
+      blockA -- blockA_verif;
+      blockA_design -- blockA_rtl;
+      blockA_verif -- blockA_tb;
+    }
+    subgraph clusterB {
+      label = "BlockB Repository"
+      blockB -- blockB_design;
+      blockB -- blockB_verif;
+      blockB_design -- blockB_rtl;
+      blockB_verif -- blockB_tb;
+    }
+    chip -- blockA 
+    chip -- blockB 
+    }
+} 
+   
