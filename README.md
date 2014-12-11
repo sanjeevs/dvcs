@@ -37,14 +37,14 @@
 ### Problems faces by RTL Designers
 
   1. No Private Repositories
-  RTL designers are working under the pressure of last minute changes. They are constantly working to push the envelope by trying different implementation of the same features looking to either optimize power, timing, area etc.
+  RTL designers are working under the pressure of last minute changes. They are constantly working to push the envelope by trying different implementation of the same features looking to either optimize power, timing, area etc. The common solution for the designer is to create multiple independent workspaces for each of the independent changes. But without version control it is hard to save intermediate success points and discard changes.
 
   2. Supporting Multiple Flavors of Design
     * RTL designers are supporting multiple teams at the same time. Traditionally a block level would be verified by the block level team and when complete, would be part of the full chip verificaton. But now, verification teams are running in parallel. The same block could be simultaneously been verified in full chip, multi chip and even emulation environments by different teams.
     * Moreover RTL designers now need to actively work with the backend team to improve synthesis, floor planning for optimizing power, timing....etc. The requirments for fixes here may be different from that required by the verification team. For example the designer might want to flop signals without worrying about the functionality of the design.
 
   3. Dependency Hell
-    *  Keeping multiple blocks under one repository causes unwarranted dependencies to creep between the blocks. This leads to "dependency hell" where an unrelated bad check in, causes the current block environment to fail.
+    *  Keeping multiple blocks under one repository causes unwarranted dependencies to creep between the blocks. Just because the view has all the sub blocks, designers would have a tendency to share code from other block directories, rather than isolate it in a separate common block. This leads to "dependency hell" where an unrelated bad check in, causes the current block environment to fail.
 
     ![Traditional View](images/old_dir.png)
 
@@ -53,7 +53,11 @@
     + Bugs discovered in older releases may need a hot fix in the same release.  
 
   5. Automated Testing
-    + Version control system must provide hooks to run regressions, lint tools etc. Implementing it manually by a "BuildMaster" is time consuming and wasting of resource. 
+    + Version control system must provide hooks to run regressions, lint tools etc. Implementing it manually by a "BuildMaster" is time consuming and wasting of resource. Usually the build master runs the cron job at specified time (or continuously) to checkout the entire design in a clean area and report the result of the regressions. The usual problems designers face is
+      * Lack of Atomic Commit: 
+        Version control system like "CVS" do not support multiple checkins as a single atomic commit. So there is a chance that the build master may pull an intermediate invalid state of the design.
+      * Static Scheduling: 
+        Running all block regression at a fixed time or continuously wastes resources. Debugging failing tests when they are expected to fail is not productive. Instead designers would like to have control on which commits they would like to run regressions on. Designer may decide that it is not worth running regressions on intermediate commits and would like to run it only when all the changes are committed. 
 
 
 ### How Does Git Solve it ?
